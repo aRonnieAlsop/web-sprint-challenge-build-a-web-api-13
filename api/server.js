@@ -1,8 +1,11 @@
 const express = require('express')
+const projectsRouter = require('./projects/projects-router')
 const server = express()
 
 // Configure your server here
 server.use(express.json())
+
+server.use('/api/projects', projectsRouter)
 
 server.use('*', (req, res) => {
     res.status(404).json({
