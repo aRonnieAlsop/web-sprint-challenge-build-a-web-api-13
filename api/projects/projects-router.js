@@ -4,9 +4,6 @@ const Project = require('./projects-model')
 
 const router = express.Router()
 
-// - [ ] `[GET] /api/projects`
-//   - Returns an array of projects as the body of the response.
-//   - If there are no projects it responds with an empty array.
 router.get('/', (req, res) => {
     Project.get()
         .then(projects => {
@@ -19,6 +16,35 @@ router.get('/', (req, res) => {
         .catch(err => {
             res.status(500).json({ message: `oops` })
         }) 
+})
+//this get needs fixed
+router.get('/:id', async (req, res) => {
+    try {
+        const project = await Project.get(req.params.id)
+        if (!project) {
+            res.status(404)
+        } else {
+            res.json(req.project)
+        }
+
+    } catch (err) {
+        res.status(500).json({message: `oops`})
+    }
+})
+
+router.post('/', (req, res) => {
+    const newProject = req.body
+    if (!newProject.name || !newProject.description) {
+        res.status(400).json({ message: `oops`})
+    } else {
+        Project.insert(newProject)
+        .then(project => {
+            res.status(201).json(project)
+        })
+        .catch (err => {
+            res.status(500).json({ message: `oops`})
+        })
+    }
 })
 
 
