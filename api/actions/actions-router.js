@@ -27,11 +27,21 @@ router.get('/:id', validateActionId, (req, res) => {
     res.status(200).json(req.action)
 })
 
+router.post('/', checkActionPayload, (req, res, next) => {
+    const newAction = req.body
+
+    Actions.insert(newAction)
+        .then((action) => {
+            res.status(201).json(action)
+        })
+        .catch((err) => {
+            next(err)
+        })
+})
+
 module.exports = router
 
-// - [ ] `[GET] /api/actions/:id`
-//   - Returns an action with the given `id` as the body of the response.
-//   - If there is no action with the given `id` it responds with a status code 404.
+
 // - [ ] `[POST] /api/actions`
 //   - Returns the newly created action as the body of the response.
 //   - If the request body is missing any of the required fields it responds with a status code 400.
