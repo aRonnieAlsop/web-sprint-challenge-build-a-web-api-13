@@ -18,18 +18,8 @@ router.get('/', (req, res) => {
         }) 
 })
 //this get needs fixed
-router.get('/:id', async (req, res) => {
-    try {
-        const project = await Project.get(req.params.id)
-        if (!project) {
-            res.status(404)
-        } else {
-            res.json(req.project)
-        }
+router.get('/:id', (req, res) => {
 
-    } catch (err) {
-        res.status(500).json({message: `oops`})
-    }
 })
 
 router.post('/', (req, res) => {
