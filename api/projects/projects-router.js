@@ -47,7 +47,10 @@ router.delete('/:id', validateProjectId, (req, res, next) => {
     .catch(next)
 })
 
-
+router.put('/:id', validateProjectId, checkProjectPayload, async (req, res) => {
+    const updateProject = await Projects.update(req.params.id, req.body)
+    res.status(200).json(updateProject)
+})
 
 router.use(errorHandler)
 

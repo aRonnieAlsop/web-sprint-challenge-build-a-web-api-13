@@ -27,9 +27,9 @@ async function validateProjectId(req, res, next) {
 function checkProjectPayload(req, res, next) {
    const { name, description} = req.body
 
-   if (!name || !description) {
+   if (!name || !description || !req.body.hasOwnProperty('completed')) {
         res.status(400).json({
-            message: 'name & description are required'
+            message: 'name & description & completion field are required'
         })
    } else {
         next()
