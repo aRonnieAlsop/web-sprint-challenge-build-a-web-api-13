@@ -47,15 +47,13 @@ router.delete('/:id', validateActionId, (req, res, next) => {
     .catch(next)
 })
 
+router.put('/:id', validateActionId, checkActionPayload, async (req, res) => {
+    const updateAction = await Actions.update(req.params.id, req.body)
+    res.status(200).json(updateAction)
+})
 
 module.exports = router
 
 
 
-// - [ ] `[PUT] /api/actions/:id`
-//   - Returns the updated action as the body of the response.
-//   - If there is no action with the given `id` it responds with a status code 404.
-//   - If the request body is missing any of the required fields it responds with a status code 400.
-// - [ ] `[DELETE] /api/actions/:id`
-//   - Returns no response body.
-//   - If there is no action with the given `id` it responds with a status code 404.
+
