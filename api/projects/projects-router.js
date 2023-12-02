@@ -9,7 +9,7 @@ const Projects = require('./projects-model')
 
 const router = express.Router()
 
-router.get('/', (req, res) => {
+router.get('/', (req, res, next) => {
     Projects.get()
         .then(project => {
             if (project) {
@@ -19,7 +19,7 @@ router.get('/', (req, res) => {
             }
         }) 
         .catch(err => {
-            res.status(500).json({ message: 'no fetch' })
+            next(err)
         }) 
 })
 
@@ -27,7 +27,7 @@ router.get('/:id', validateProjectId, (req, res) => {
     res.status(200).json(req.project)
 })
 
-router.post('/', checkProjectPayload, (req, res) => {
+router.post('/', checkProjectPayload, (req, res, next) => {
     const newProject = req.body
     
     Projects.insert(newProject) 
@@ -35,7 +35,7 @@ router.post('/', checkProjectPayload, (req, res) => {
             res.status(201).json(project)
         })
         .catch((err) => {
-            res.status(500).json({ message: 'unable to post for some reason'})
+            next(err)
         })
 })
 
@@ -50,6 +50,15 @@ router.delete('/:id', validateProjectId, (req, res, next) => {
 router.put('/:id', validateProjectId, checkProjectPayload, async (req, res) => {
     const updateProject = await Projects.update(req.params.id, req.body)
     res.status(200).json(updateProject)
+})
+
+router.get('/:id/actions', validateProjectId, async (req, res, next) => {
+    try {
+        const projectActions = await Projects.getProjectActions(req.params.id)
+        res.json(projectActions)
+    } catch (err) {
+        next(err)
+    }
 })
 
 router.use(errorHandler)

@@ -1,10 +1,10 @@
 // add middlewares here related to projects
 const Projects = require('./projects-model')
 
-function errorHandler(err, req, res, next) {
+function errorHandler(err, req, res) {
     res.status(err.status || 500).json({
         message: err.message,
-        developerMessage: 'ooops',
+        developerMessage: 'something wicked this way comes',
     })
 }
 
