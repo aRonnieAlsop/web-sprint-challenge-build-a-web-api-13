@@ -12,8 +12,12 @@ async function validateActionId(req, res, next) {
     try {
         const action = await Actions.get(req.params.id)
         if (action) {
-            req.project = project
+            req.action = action
             next()
+        } else {
+            res.status(404).json({
+                message: 'what action?'
+            })
         }
     } catch (err) {
         next(err)
